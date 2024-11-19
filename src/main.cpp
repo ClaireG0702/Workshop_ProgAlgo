@@ -42,7 +42,7 @@ void negative(sil::Image &image) {
 void gradient(sil::Image &image) {
     for(int x{0}; x < image.width(); x++) {
         for(int y{0}; y < image.height(); y++) {
-            image.pixel(x, y) = glm::vec3 (static_cast<float>(x) / image.width() - 1);
+            image.pixel(x, y) = glm::vec3 (static_cast<float>(x) / static_cast<float>(image.width() - 1));
         }
     }
 }
@@ -87,7 +87,7 @@ sil::Image splitRGB(sil::Image &image)
         for(int y{0}; y < image.height(); y++) {
             if(x < 31) {
                 editedImage.pixel(x, y).b = image.pixel(x + 30, y).b;
-            } else if (x > image.width() - 32) {
+            } else if (x >= image.width() - 30) {
                 editedImage.pixel(x, y).r = image.pixel(x - 30, y).r;
             } else {
                 editedImage.pixel(x, y).r = image.pixel(x - 30, y).r;
@@ -119,7 +119,74 @@ void lowerLuminosity(sil::Image &image) {
 }
 
 void disc(sil::Image &image) {
+    int rayon{100};
+    for(int x{0}; x < image.width(); x++) {
+        for(int y{0}; y < image.height(); y++) {
+            int dx = x - image.width()/2;
+            int dy = y - image.height()/2;
 
+            if (dx * dx + dy * dy <= rayon * rayon) {
+                image.pixel(x, y).r = 1.0f;
+                image.pixel(x, y).g = 1.0f;
+                image.pixel(x, y).b = 1.0f;
+            }
+        }
+    }
+}
+void circle(sil::Image &image) {
+    int rayon{100};
+    int thickness{5};
+
+    for(int x{0}; x < image.width(); x++) {
+        for(int y{0}; y < image.height(); y++) {
+            int dx = x - image.width()/2;
+            int dy = y - image.height()/2;
+
+            if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness))) {
+                image.pixel(x, y).r = 1.0f;
+                image.pixel(x, y).g = 1.0f;
+                image.pixel(x, y).b = 1.0f;
+            }
+        }
+    }
+}
+void rosace(sil::Image &image) {
+    int rayon{100};
+    int thickness{3};
+
+    for(int x{0}; x < image.width(); x++) {
+        for(int y{0}; y < image.height(); y++) {
+            int dx = x - image.width()/2;
+            int dy = y - image.height()/2;
+
+            if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness))) {
+                image.pixel(x, y).r = 1.0f;
+                image.pixel(x, y).g = 1.0f;
+                image.pixel(x, y).b = 1.0f;
+            }
+        }
+    }
+    int centreX = image.width() / 2;
+    int centreY = image.height() / 2;
+    float angleStep = 2 * 3.14 / 6;
+    for (int i = 0; i < 6; i++) {
+        float angle = i * angleStep;
+        int offsetX = static_cast<int>(rayon * cos(angle));
+        int offsetY = static_cast<int>(rayon * sin(angle));
+
+        for (int x = 0; x < image.width(); x++) {
+            for (int y = 0; y < image.height(); y++) {
+                int dx = x - centreX - offsetX;
+                int dy = y - centreY - offsetY;
+
+                if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness))) {
+                    image.pixel(x, y).r = 1.0f;
+                    image.pixel(x, y).g = 1.0f;
+                    image.pixel(x, y).b = 1.0f;
+                }
+            }
+        }
+    }
 }
 
 int main()
@@ -171,11 +238,25 @@ int main()
     }
     {
         sil::Image image1{"images/photo.jpg"};
-        sil::Image image2{"images/photo.jpg"};
         higherLuminosity(image1);
         image1.save("output/higherLuminosity.png");
+        sil::Image image2{"images/photo.jpg"};
         lowerLuminosity(image2);
         image2.save("output/lowerLuminosity.png");
+    }
+    {
+        sil::Image discImage{500, 500};
+        disc(discImage);
+        discImage.save("output/disc.png");
+        sil::Image circleImage{500, 500};
+        circle(circleImage);
+        circleImage.save("output/circle.png");
+        sil::Image rosaceImage{600, 600};
+        rosace(rosaceImage);
+        rosaceImage.save("output/rosace.png");
+    }
+    {
+        
     }
 
     return 0;
