@@ -99,10 +99,21 @@ sil::Image splitRGB(sil::Image &image)
     return editedImage;
 }
 
-void luminosity(sil::Image &image) {
+void higherLuminosity(sil::Image &image) {
     for(int x{0}; x < image.width(); x++) {
         for(int y{0}; y < image.height(); y++) {
-            
+            image.pixel(x, y).r = std::sqrt(image.pixel(x, y).r);
+            image.pixel(x, y).g = std::sqrt(image.pixel(x, y).g);
+            image.pixel(x, y).b = std::sqrt(image.pixel(x, y).b);
+        }
+    }
+}
+void lowerLuminosity(sil::Image &image) {
+    for(int x{0}; x < image.width(); x++) {
+        for(int y{0}; y < image.height(); y++) {
+            image.pixel(x, y).r = std::pow(image.pixel(x, y).r, 2);
+            image.pixel(x, y).g = std::pow(image.pixel(x, y).g, 2);
+            image.pixel(x, y).b = std::pow(image.pixel(x, y).b, 2);
         }
     }
 }
@@ -155,9 +166,12 @@ int main()
         editedImage.save("output/splitRGB.png");
     }
     {
-        sil::Image image{"images/photo.jpg"};
-        luminosity(image);
-        image.save("output/luminosity.png");
+        sil::Image image1{"images/photo.jpg"};
+        sil::Image image2{"images/photo.jpg"};
+        higherLuminosity(image1);
+        image1.save("output/higherLuminosity.png");
+        lowerLuminosity(image2);
+        image2.save("output/lowerLuminosity.png");
     }
 
     return 0;
