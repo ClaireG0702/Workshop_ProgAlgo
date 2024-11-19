@@ -189,6 +189,33 @@ void rosace(sil::Image &image) {
     }
 }
 
+void test(sil::Image &image) {
+    for(int x{0}; x < image.width(); x++){
+        for(int y{0}; y < image.height(); y++) {
+            if(true_with_probability(0.3f)) {
+                std::swap(image.pixel(x, y).r, image.pixel(x, y).g);
+            } else if (true_with_probability(0.2f)) {
+                std::swap(image.pixel(random_int(x, image.width()), random_int(y, image.height())), image.pixel(x, y));
+            }
+        }
+    }
+}
+void test2(sil::Image &image) {
+    for(int x{0}; x < image.width(); x++){
+        for(int y{0}; y < image.height(); y++) {
+            if(true_with_probability(0.4f)) {
+                std::swap(image.pixel(x, y).b, image.pixel(x, y).g);
+            } else if (true_with_probability(0.2f)) {
+                image.pixel(x, y).g = 0.f;
+                image.pixel(x, y).b = 0.f;
+            }
+        }
+    }
+}
+void test3(sil::Image &image) {
+    
+}
+
 int main()
 {
     {
@@ -256,7 +283,14 @@ int main()
         rosaceImage.save("output/rosace.png");
     }
     {
-        
+        sil::Image image{"images/logo.png"};
+        test(image);
+        image.save("output/tests/test1.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        test2(image);
+        image.save("output/tests/test2.png");
     }
 
     return 0;
