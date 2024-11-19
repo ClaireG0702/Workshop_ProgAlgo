@@ -67,17 +67,17 @@ void noisy(sil::Image &image) {
     }
 }
 
-/*sil::Image rotation(sil::Image &image) {
+sil::Image rotation(sil::Image &image) {
     sil::Image rotatedImage{image.height(), image.width()};
 
     for(int x{0}; x < rotatedImage.width(); x++) {
         for(int y{0}; y < rotatedImage.height(); y++) {
-            rotatedImage.pixel(x, y) = image.pixel(y, image.width() - x - 1);
+            rotatedImage.pixel(x, y) = image.pixel(y, image.height() - x - 1);
         }
     }
 
     return rotatedImage;
-}*/
+}
 
 sil::Image splitRGB(sil::Image &image)
 {
@@ -118,6 +118,10 @@ void lowerLuminosity(sil::Image &image) {
     }
 }
 
+void disc(sil::Image &image) {
+
+}
+
 int main()
 {
     {
@@ -155,11 +159,11 @@ int main()
         noisy(image);
         image.save("output/noisy.png");
     }
-    /*{
+    {
         sil::Image image{"images/logo.png"};
         sil::Image rotatedImage{rotation(image)};
-        rotatedImage.save("rotation.png");
-    }*/
+        rotatedImage.save("output/rotation.png");
+    }
     {
         sil::Image image{"images/logo.png"};
         sil::Image editedImage{splitRGB(image)};
