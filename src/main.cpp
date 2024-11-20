@@ -229,7 +229,26 @@ sil::Image mirrorMosaic(sil::Image &image) {
 }
 
 void glitch(sil::Image &image) {
+    int number_glitch = 80;
 
+    for (int i = 0; i < number_glitch; ++i) {
+        int rectangle1_x = random_int(0, image.width() - 1);
+        int rectangle1_y = random_int(0, image.height() - 1);
+        int rectangle_width = random_int(5, 20); 
+        int rectangle_height = random_int(1, 10); 
+
+        int rectangle2_x = random_int(0, image.width() - 1);
+        int rectangle2_y = random_int(0, image.height() - 1);
+
+        rectangle_width = std::min(rectangle_width, image.width() - std::max(rectangle1_x, rectangle2_x));
+        rectangle_height = std::min(rectangle_height, image.height() - std::max(rectangle1_y, rectangle2_y));
+
+        for (int x = 0; x < rectangle_width; ++x) {
+            for (int y = 0; y < rectangle_height; ++y) {
+                std::swap(image.pixel(rectangle1_x + x, rectangle1_y + y), image.pixel(rectangle2_x + x, rectangle2_y + y));
+            }
+        }
+    }
 }
 
 void test(sil::Image &image) {
