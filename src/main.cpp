@@ -3,36 +3,48 @@
 #include "random.hpp"
 #include <vector>
 
-void keepOnlyGreen(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
+void keepOnlyGreen(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
             image.pixel(x, y).r = 0.f;
             image.pixel(x, y).b = 0.f;
         }
     }
 }
 
-void swapChannels(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
+void swapChannels(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
             std::swap(image.pixel(x, y).r, image.pixel(x, y).b);
         }
     }
 }
 
-void blackAndWhite(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
+void blackAndWhite(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
             float gray = 0.2126 * image.pixel(x, y).r + 0.7152 * image.pixel(x, y).g + 0.0722 * image.pixel(x, y).b;
-        
-            image.pixel(x, y) = glm::vec3 (gray);
+
+            image.pixel(x, y) = glm::vec3(gray);
         }
     }
 }
 
-void negative(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
+void negative(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
             image.pixel(x, y).r = 1.0f - image.pixel(x, y).r;
             image.pixel(x, y).g = 1.0f - image.pixel(x, y).g;
             image.pixel(x, y).b = 1.0f - image.pixel(x, y).b;
@@ -40,26 +52,36 @@ void negative(sil::Image &image) {
     }
 }
 
-void gradient(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
-            image.pixel(x, y) = glm::vec3 (static_cast<float>(x) / static_cast<float>(image.width() - 1));
+void gradient(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            image.pixel(x, y) = glm::vec3(static_cast<float>(x) / static_cast<float>(image.width() - 1));
         }
     }
 }
 
-void mirror(sil::Image &image) {
-    for(int x{0}; x < image.width()/2; x++) {
-        for(int y{0}; y < image.height(); y++) {
-            std::swap(image.pixel(x, y), image.pixel(image.width()-(x+1), y));
+void mirror(sil::Image &image)
+{
+    for (int x{0}; x < image.width() / 2; x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            std::swap(image.pixel(x, y), image.pixel(image.width() - (x + 1), y));
         }
     }
 }
 
-void noisy(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
-            if(true_with_probability(0.3f)) {
+void noisy(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            if (true_with_probability(0.3f))
+            {
                 image.pixel(x, y).r = random_float(0, 1);
                 image.pixel(x, y).g = random_float(0, 1);
                 image.pixel(x, y).b = random_float(0, 1);
@@ -68,11 +90,14 @@ void noisy(sil::Image &image) {
     }
 }
 
-sil::Image rotation(sil::Image &image) {
+sil::Image rotation(sil::Image &image)
+{
     sil::Image rotatedImage{image.height(), image.width()};
 
-    for(int x{0}; x < rotatedImage.width(); x++) {
-        for(int y{0}; y < rotatedImage.height(); y++) {
+    for (int x{0}; x < rotatedImage.width(); x++)
+    {
+        for (int y{0}; y < rotatedImage.height(); y++)
+        {
             rotatedImage.pixel(x, y) = image.pixel(y, image.height() - x - 1);
         }
     }
@@ -84,12 +109,16 @@ sil::Image splitRGB(sil::Image &image)
 {
     sil::Image editedImage{image.width(), image.height()};
 
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
-            if(x > 31) {    
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            if (x > 31)
+            {
                 editedImage.pixel(x, y).r = image.pixel(x - 30, y).r;
             }
-            if (x < image.width() - 31) {
+            if (x < image.width() - 31)
+            {
                 editedImage.pixel(x, y).b = image.pixel(x + 30, y).b;
             }
             editedImage.pixel(x, y).g = image.pixel(x, y).g;
@@ -99,18 +128,24 @@ sil::Image splitRGB(sil::Image &image)
     return editedImage;
 }
 
-void higherLuminosity(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
+void higherLuminosity(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
             image.pixel(x, y).r = std::sqrt(image.pixel(x, y).r);
             image.pixel(x, y).g = std::sqrt(image.pixel(x, y).g);
             image.pixel(x, y).b = std::sqrt(image.pixel(x, y).b);
         }
     }
 }
-void lowerLuminosity(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
+void lowerLuminosity(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
             image.pixel(x, y).r = std::pow(image.pixel(x, y).r, 2);
             image.pixel(x, y).g = std::pow(image.pixel(x, y).g, 2);
             image.pixel(x, y).b = std::pow(image.pixel(x, y).b, 2);
@@ -118,14 +153,18 @@ void lowerLuminosity(sil::Image &image) {
     }
 }
 
-void disc(sil::Image &image) {
+void disc(sil::Image &image)
+{
     int rayon{100};
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
-            int dx = x - image.width()/2;
-            int dy = y - image.height()/2;
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            int dx = x - image.width() / 2;
+            int dy = y - image.height() / 2;
 
-            if (dx * dx + dy * dy <= rayon * rayon) {
+            if (dx * dx + dy * dy <= rayon * rayon)
+            {
                 image.pixel(x, y).r = 1.0f;
                 image.pixel(x, y).g = 1.0f;
                 image.pixel(x, y).b = 1.0f;
@@ -133,16 +172,20 @@ void disc(sil::Image &image) {
         }
     }
 }
-void circle(sil::Image &image) {
+void circle(sil::Image &image)
+{
     int rayon{100};
     int thickness{5};
 
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
-            int dx = x - image.width()/2;
-            int dy = y - image.height()/2;
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            int dx = x - image.width() / 2;
+            int dy = y - image.height() / 2;
 
-            if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness))) {
+            if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness)))
+            {
                 image.pixel(x, y).r = 1.0f;
                 image.pixel(x, y).g = 1.0f;
                 image.pixel(x, y).b = 1.0f;
@@ -150,16 +193,20 @@ void circle(sil::Image &image) {
         }
     }
 }
-void rosace(sil::Image &image) {
+void rosace(sil::Image &image)
+{
     int rayon{100};
     int thickness{3};
 
-    for(int x{0}; x < image.width(); x++) {
-        for(int y{0}; y < image.height(); y++) {
-            int dx = x - image.width()/2;
-            int dy = y - image.height()/2;
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            int dx = x - image.width() / 2;
+            int dy = y - image.height() / 2;
 
-            if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness))) {
+            if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness)))
+            {
                 image.pixel(x, y).r = 1.0f;
                 image.pixel(x, y).g = 1.0f;
                 image.pixel(x, y).b = 1.0f;
@@ -169,17 +216,21 @@ void rosace(sil::Image &image) {
     int centreX = image.width() / 2;
     int centreY = image.height() / 2;
     float angleStep = 2 * 3.14 / 6;
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++)
+    {
         float angle = i * angleStep;
         int offsetX = static_cast<int>(rayon * cos(angle));
         int offsetY = static_cast<int>(rayon * sin(angle));
 
-        for (int x = 0; x < image.width(); x++) {
-            for (int y = 0; y < image.height(); y++) {
+        for (int x = 0; x < image.width(); x++)
+        {
+            for (int y = 0; y < image.height(); y++)
+            {
                 int dx = x - centreX - offsetX;
                 int dy = y - centreY - offsetY;
 
-                if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness))) {
+                if ((dx * dx + dy * dy <= rayon * rayon) && (dx * dx + dy * dy > (rayon - thickness) * (rayon - thickness)))
+                {
                     image.pixel(x, y).r = 1.0f;
                     image.pixel(x, y).g = 1.0f;
                     image.pixel(x, y).b = 1.0f;
@@ -189,13 +240,16 @@ void rosace(sil::Image &image) {
     }
 }
 
-sil::Image mosaic(sil::Image &image) {
+sil::Image mosaic(sil::Image &image)
+{
     sil::Image mosaic{image.width() * 5, image.height() * 5};
 
-    for(int x{0}; x < mosaic.width(); x++) {
-        for(int y{0}; y < mosaic.height(); y++) {
-            int oldX {x % image.width()};
-            int oldY {y % image.height()};
+    for (int x{0}; x < mosaic.width(); x++)
+    {
+        for (int y{0}; y < mosaic.height(); y++)
+        {
+            int oldX{x % image.width()};
+            int oldY{y % image.height()};
 
             mosaic.pixel(x, y) = image.pixel(oldX, oldY);
         }
@@ -203,21 +257,26 @@ sil::Image mosaic(sil::Image &image) {
 
     return mosaic;
 }
-sil::Image mirrorMosaic(sil::Image &image) {
+sil::Image mirrorMosaic(sil::Image &image)
+{
     sil::Image mosaic{image.width() * 5, image.height() * 5};
 
-    for(int x{0}; x < mosaic.width(); x++) {
-        for(int y{0}; y < mosaic.height(); y++) {
-            int oldX {x % image.width()};
-            int oldY {y % image.height()};
+    for (int x{0}; x < mosaic.width(); x++)
+    {
+        for (int y{0}; y < mosaic.height(); y++)
+        {
+            int oldX{x % image.width()};
+            int oldY{y % image.height()};
 
-            bool mirrorX {(x / image.width()) % 2 == 1};
-            bool mirrorY {(y / image.height()) % 2 == 1}; 
+            bool mirrorX{(x / image.width()) % 2 == 1};
+            bool mirrorY{(y / image.height()) % 2 == 1};
 
-            if (mirrorX) {
+            if (mirrorX)
+            {
                 oldX = image.width() - oldX - 1;
             }
-            if (mirrorY) {
+            if (mirrorY)
+            {
                 oldY = image.height() - oldY - 1;
             }
 
@@ -228,14 +287,16 @@ sil::Image mirrorMosaic(sil::Image &image) {
     return mosaic;
 }
 
-void glitch(sil::Image &image) {
+void glitch(sil::Image &image)
+{
     int number_glitch = 80;
 
-    for (int i = 0; i < number_glitch; ++i) {
+    for (int i = 0; i < number_glitch; ++i)
+    {
         int rectangle1_x = random_int(0, image.width() - 1);
         int rectangle1_y = random_int(0, image.height() - 1);
-        int rectangle_width = random_int(5, 20); 
-        int rectangle_height = random_int(1, 10); 
+        int rectangle_width = random_int(5, 20);
+        int rectangle_height = random_int(1, 10);
 
         int rectangle2_x = random_int(0, image.width() - 1);
         int rectangle2_y = random_int(0, image.height() - 1);
@@ -243,39 +304,137 @@ void glitch(sil::Image &image) {
         rectangle_width = std::min(rectangle_width, image.width() - std::max(rectangle1_x, rectangle2_x));
         rectangle_height = std::min(rectangle_height, image.height() - std::max(rectangle1_y, rectangle2_y));
 
-        for (int x = 0; x < rectangle_width; ++x) {
-            for (int y = 0; y < rectangle_height; ++y) {
+        for (int x = 0; x < rectangle_width; ++x)
+        {
+            for (int y = 0; y < rectangle_height; ++y)
+            {
                 std::swap(image.pixel(rectangle1_x + x, rectangle1_y + y), image.pixel(rectangle2_x + x, rectangle2_y + y));
             }
         }
     }
 }
 
-void test(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++){
-        for(int y{0}; y < image.height(); y++) {
-            if(true_with_probability(0.3f)) {
+float brightness(glm::vec3 pixel)
+{
+    return 0.2126 * pixel.r + 0.7152 * pixel.g + 0.0722 * pixel.b;
+}
+// Tri de toute l'image
+void pixelsSorting1(sil::Image &image)
+{
+    for (int i{0}; i < image.pixels().size(); i++)
+    {
+        float record{-1};
+        int selectedPixel{i};
+
+        for (int j{i}; j < image.pixels().size(); j++)
+        {
+            auto pix = image.pixels().at(j);
+            float bright = brightness(pix);
+
+            if (bright > record)
+            {
+                selectedPixel = j;
+                record = bright;
+            }
+        }
+
+        std::swap(image.pixels().at(selectedPixel), image.pixels().at(i));
+    }
+}
+// Tri par colonnes
+void pixelsSorting2(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        float record{-1};
+
+        for (int i{0}; i < image.height(); i++)
+        {
+            float record{-1};
+            auto selectedPixel{image.pixel(x, i)};
+
+            for (int j{i}; j < image.height(); j++)
+            {
+                auto pix = image.pixel(x, j);
+                float bright = brightness(pix);
+
+                if (bright > record)
+                {
+                    selectedPixel = pix;
+                    record = bright;
+                }
+            }
+
+            std::swap(selectedPixel, image.pixel(x, i));
+        }
+    }
+}
+// Tri par lignes
+void pixelsSorting3(sil::Image &image)
+{
+    for (int y{0}; y < image.height(); y++)
+    {
+        float record{-1};
+
+        for (int i{0}; i < image.width(); i++)
+        {
+            float record{-1};
+            auto selectedPixel{image.pixel(i, y)};
+
+            for (int j{i}; j < image.width(); j++)
+            {
+                auto pix = image.pixel(j, y);
+                float bright = brightness(pix);
+
+                if (bright > record)
+                {
+                    selectedPixel = pix;
+                    record = bright;
+                }
+            }
+
+            std::swap(selectedPixel, image.pixel(i, y));
+        }
+    }
+}
+
+void test(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            if (true_with_probability(0.3f))
+            {
                 std::swap(image.pixel(x, y).r, image.pixel(x, y).g);
-            } else if (true_with_probability(0.2f)) {
+            }
+            else if (true_with_probability(0.2f))
+            {
                 std::swap(image.pixel(random_int(x, image.width()), random_int(y, image.height())), image.pixel(x, y));
             }
         }
     }
 }
-void test2(sil::Image &image) {
-    for(int x{0}; x < image.width(); x++){
-        for(int y{0}; y < image.height(); y++) {
-            if(true_with_probability(0.4f)) {
+void test2(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            if (true_with_probability(0.4f))
+            {
                 std::swap(image.pixel(x, y).b, image.pixel(x, y).g);
-            } else if (true_with_probability(0.2f)) {
+            }
+            else if (true_with_probability(0.2f))
+            {
                 image.pixel(x, y).g = 0.f;
                 image.pixel(x, y).b = 0.f;
             }
         }
     }
 }
-void test3(sil::Image &image) {
-    
+void test3(sil::Image &image)
+{
 }
 
 int main()
@@ -354,10 +513,21 @@ int main()
     //     sil::Image mosaicImage{mirrorMosaic(image)};
     //     mosaicImage.save("output/mirrorMosaic.png");
     // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     glitch(image);
+    //     image.save("output/glitch.png");
+    // }
     {
-        sil::Image image{"images/logo.png"};
-        glitch(image);
-        image.save("output/glitch.png");
+        // sil::Image image1{"images/logo.png"};
+        // pixelsSorting1(image1);
+        // image1.save("output/pixelsSorting1.png");
+        // sil::Image image2{"images/logo.png"};
+        // pixelsSorting2(image2);
+        // image2.save("output/pixelsSorting2.png");
+        sil::Image image3{"images/logo.png"};
+        pixelsSorting3(image3);
+        image3.save("output/pixelsSorting3.png");
     }
     // {
     //     sil::Image image{"images/logo.png"};
