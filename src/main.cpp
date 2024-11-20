@@ -1,6 +1,7 @@
 #include <sil/sil.hpp>
 #include <iostream>
 #include "random.hpp"
+#include <vector>
 
 void keepOnlyGreen(sil::Image &image) {
     for(int x{0}; x < image.width(); x++) {
@@ -188,8 +189,47 @@ void rosace(sil::Image &image) {
     }
 }
 
-void mosaic(sil::Image &image) {
-    
+sil::Image mosaic(sil::Image &image) {
+    sil::Image mosaic{image.width() * 5, image.height() * 5};
+
+    for(int x{0}; x < mosaic.width(); x++) {
+        for(int y{0}; y < mosaic.height(); y++) {
+            int oldX {x % image.width()};
+            int oldY {y % image.height()};
+
+            mosaic.pixel(x, y) = image.pixel(oldX, oldY);
+        }
+    }
+
+    return mosaic;
+}
+sil::Image mirrorMosaic(sil::Image &image) {
+    sil::Image mosaic{image.width() * 5, image.height() * 5};
+
+    for(int x{0}; x < mosaic.width(); x++) {
+        for(int y{0}; y < mosaic.height(); y++) {
+            int oldX {x % image.width()};
+            int oldY {y % image.height()};
+
+            bool mirrorX {(x / image.width()) % 2 == 1};
+            bool mirrorY {(y / image.height()) % 2 == 1}; 
+
+            if (mirrorX) {
+                oldX = image.width() - oldX - 1;
+            }
+            if (mirrorY) {
+                oldY = image.height() - oldY - 1;
+            }
+
+            mosaic.pixel(x, y) = image.pixel(oldX, oldY);
+        }
+    }
+
+    return mosaic;
+}
+
+void glitch(sil::Image &image) {
+
 }
 
 void test(sil::Image &image) {
@@ -221,85 +261,95 @@ void test3(sil::Image &image) {
 
 int main()
 {
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     keepOnlyGreen(image);
+    //     image.save("output/keepOnlyGreen.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     swapChannels(image);
+    //     image.save("output/swapChannels.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     blackAndWhite(image);
+    //     image.save("output/blackAndWhite.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     negative(image);
+    //     image.save("output/negative.png");
+    // }
+    // {
+    //     sil::Image image{300, 200};
+    //     gradient(image);
+    //     image.save("output/gradient.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     mirror(image);
+    //     image.save("output/mirror.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     noisy(image);
+    //     image.save("output/noisy.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     sil::Image rotatedImage{rotation(image)};
+    //     rotatedImage.save("output/rotation.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     sil::Image editedImage{splitRGB(image)};
+    //     editedImage.save("output/splitRGB.png");
+    // }
+    // {
+    //     sil::Image image1{"images/photo.jpg"};
+    //     higherLuminosity(image1);
+    //     image1.save("output/higherLuminosity.png");
+    //     sil::Image image2{"images/photo.jpg"};
+    //     lowerLuminosity(image2);
+    //     image2.save("output/lowerLuminosity.png");
+    // }
+    // {
+    //     sil::Image discImage{500, 500};
+    //     disc(discImage);
+    //     discImage.save("output/disc.png");
+    //     sil::Image circleImage{500, 500};
+    //     circle(circleImage);
+    //     circleImage.save("output/circle.png");
+    //     sil::Image rosaceImage{600, 600};
+    //     rosace(rosaceImage);
+    //     rosaceImage.save("output/rosace.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     sil::Image mosaicImage{mosaic(image)};
+    //     mosaicImage.save("output/mosaic.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     sil::Image mosaicImage{mirrorMosaic(image)};
+    //     mosaicImage.save("output/mirrorMosaic.png");
+    // }
     {
         sil::Image image{"images/logo.png"};
-        keepOnlyGreen(image);
-        image.save("output/keepOnlyGreen.png");
+        glitch(image);
+        image.save("output/glitch.png");
     }
-    {
-        sil::Image image{"images/logo.png"};
-        swapChannels(image);
-        image.save("output/swapChannels.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        blackAndWhite(image);
-        image.save("output/blackAndWhite.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        negative(image);
-        image.save("output/negative.png");
-    }
-    {
-        sil::Image image{300, 200};
-        gradient(image);
-        image.save("output/gradient.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        mirror(image);
-        image.save("output/mirror.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        noisy(image);
-        image.save("output/noisy.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        sil::Image rotatedImage{rotation(image)};
-        rotatedImage.save("output/rotation.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        sil::Image editedImage{splitRGB(image)};
-        editedImage.save("output/splitRGB.png");
-    }
-    {
-        sil::Image image1{"images/photo.jpg"};
-        higherLuminosity(image1);
-        image1.save("output/higherLuminosity.png");
-        sil::Image image2{"images/photo.jpg"};
-        lowerLuminosity(image2);
-        image2.save("output/lowerLuminosity.png");
-    }
-    {
-        sil::Image discImage{500, 500};
-        disc(discImage);
-        discImage.save("output/disc.png");
-        sil::Image circleImage{500, 500};
-        circle(circleImage);
-        circleImage.save("output/circle.png");
-        sil::Image rosaceImage{600, 600};
-        rosace(rosaceImage);
-        rosaceImage.save("output/rosace.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        mosaic(image);
-        image.save("output/mosaic.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        test(image);
-        image.save("output/tests/test1.png");
-    }
-    {
-        sil::Image image{"images/logo.png"};
-        test2(image);
-        image.save("output/tests/test2.png");
-    }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     test(image);
+    //     image.save("output/tests/test1.png");
+    // }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     test2(image);
+    //     image.save("output/tests/test2.png");
+    // }
 
     return 0;
 }
