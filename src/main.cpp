@@ -81,18 +81,17 @@ sil::Image rotation(sil::Image &image) {
 
 sil::Image splitRGB(sil::Image &image)
 {
-    sil::Image editedImage{image};
+    sil::Image editedImage{image.width(), image.height()};
 
     for(int x{0}; x < image.width(); x++) {
         for(int y{0}; y < image.height(); y++) {
-            if(x < 31) {
-                editedImage.pixel(x, y).b = image.pixel(x + 30, y).b;
-            } else if (x >= image.width() - 30) {
+            if(x > 31) {    
                 editedImage.pixel(x, y).r = image.pixel(x - 30, y).r;
-            } else {
-                editedImage.pixel(x, y).r = image.pixel(x - 30, y).r;
+            }
+            if (x < image.width() - 31) {
                 editedImage.pixel(x, y).b = image.pixel(x + 30, y).b;
             }
+            editedImage.pixel(x, y).g = image.pixel(x, y).g;
         }
     }
 
@@ -189,6 +188,10 @@ void rosace(sil::Image &image) {
     }
 }
 
+void mosaic(sil::Image &image) {
+    
+}
+
 void test(sil::Image &image) {
     for(int x{0}; x < image.width(); x++){
         for(int y{0}; y < image.height(); y++) {
@@ -281,6 +284,11 @@ int main()
         sil::Image rosaceImage{600, 600};
         rosace(rosaceImage);
         rosaceImage.save("output/rosace.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        mosaic(image);
+        image.save("output/mosaic.png");
     }
     {
         sil::Image image{"images/logo.png"};
