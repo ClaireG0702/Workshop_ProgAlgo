@@ -3,6 +3,7 @@
 #include "random.hpp"
 #include <vector>
 #include <complex>
+#include <glm/gtx/matrix_transform_2d.hpp>
 
 void keepOnlyGreen(sil::Image &image)
 {
@@ -538,7 +539,6 @@ void dithering(sil::Image &image)
     }
 }
 
-
 void histogramNormalization(sil::Image &image) {
     auto darkestPix{image.pixel(0, 0)};
     auto lightestPix{image.pixel(0, 0)};
@@ -555,6 +555,32 @@ void histogramNormalization(sil::Image &image) {
 
             float normalizedLum = (lum - brightness(darkestPix)) / (brightness(lightestPix) - brightness(darkestPix));
             image.pixel(x, y) = image.pixel(x, y) * (normalizedLum / lum);
+        }
+    }
+}
+
+void vortex(sil::Image &image) {
+    sil::Image original_image = image;
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            glm::vec2 current_point{x, y};
+            glm::vec2 center_of_rotation{image.width()/2, image.height()/2};
+
+            float distance = glm::distance(current_point, center_of_rotation);
+
+            float angle = 45.f * (distance / glm::length(glm::vec2(image.width(), image.height())));
+
+            glm::vec2 rotated_point = glm::vec2{glm::rotate(glm::mat3{1.f}, angle) * glm::vec3{current_point - center_of_rotation, 0.f}} + center_of_rotation;
+
+            int rotated_x = static_cast<int>(std::round(rotated_point.x));
+            int rotated_y = static_cast<int>(std::round(rotated_point.y));
+
+            if (rotated_x >= 0 && rotated_x < image.width() && rotated_y >= 0 && rotated_y < image.height()) {
+                image.pixel(x, y) = original_image.pixel(rotated_x, rotated_y);
+            } else {
+                image.pixel(x, y) = {0, 0, 0};
+            }
         }
     }
 }
@@ -708,10 +734,15 @@ int main()
     //     dithering(image);
     //     image.save("output/dithering.png");
     // }
+    // {
+    //     sil::Image image{"images/photo_faible_contraste.jpg"};
+    //     histogramNormalization(image);
+    //     image.save("output/histogramNormalization.png");
+    // }
     {
-        sil::Image image{"images/photo_faible_contraste.jpg"};
-        histogramNormalization(image);
-        image.save("output/histogramNormalization.png");
+        sil::Image image{"images/logo.png"};
+        vortex(image);
+        image.save("output/vortex.png");
     }
     // {
     //     sil::Image image{"images/logo.png"};
