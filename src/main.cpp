@@ -651,6 +651,199 @@ void test3(sil::Image &image)
     image = splitRGB(image);
 }
 
+void convolution(sil::Image &image) {
+    int kernel_size = 15;
+    float sigma = 25.f;
+    int half_size = kernel_size / 2;
+    std::vector<std::vector<float>> kernel(kernel_size, std::vector<float>(kernel_size, 0.f));
+    float sum = 0.0;
+
+    for (int i = -half_size; i <= half_size; i++) {
+        for (int j = -half_size; j <= half_size; j++) {
+            float value = std::exp(-(i * i + j * j) / (2 * sigma * sigma));
+            kernel[i + half_size][j + half_size] = value;
+            sum += value;
+        }
+    }
+
+    for (int i = 0; i < kernel_size; i++) {
+        for (int j = 0; j < kernel_size; j++) {
+            kernel[i][j] /= sum;
+        }
+    }
+
+    sil::Image blurred_image = image;
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            glm::vec3 color_sum(0.0f);
+
+            for (int i = -half_size; i <= half_size; i++) {
+                for (int j = -half_size; j <= half_size; j++) {
+                    int neighbor_x = x + i;
+                    int neighbor_y = y + j;
+
+                    if (neighbor_x >= 0 && neighbor_x < image.width() &&
+                        neighbor_y >= 0 && neighbor_y < image.height()) {
+
+                        glm::vec3 neighbor_color = blurred_image.pixel(neighbor_x, neighbor_y);
+                        color_sum += neighbor_color * kernel[i + half_size][j + half_size];
+                    }
+                }
+            }
+
+            image.pixel(x, y) = color_sum;
+        }
+    }
+}
+void emboss(sil::Image &image) {
+    std::vector<std::vector<float>> kernel = {
+        {-2.f, -1.f,  0.f},
+        {-1.f,  1.f,  1.f},
+        { 0.f,  1.f,  2.f},
+    };
+    int kernel_size = 3;
+    int half_size = kernel_size / 2;
+
+    sil::Image original_image = image;
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            glm::vec3 color_sum(0.0f);
+
+            for (int i = -half_size; i <= half_size; i++) {
+                for (int j = -half_size; j <= half_size; j++) {
+                    int neighbor_x = x + i;
+                    int neighbor_y = y + j;
+
+                    if (neighbor_x >= 0 && neighbor_x < image.width() &&
+                        neighbor_y >= 0 && neighbor_y < image.height()) {
+
+                        glm::vec3 neighbor_color = original_image.pixel(neighbor_x, neighbor_y);
+                        color_sum += neighbor_color * kernel[i + half_size][j + half_size];
+                    }
+                }
+            }
+
+            // color_sum = color_sum * 0.5f + 0.5f;
+            color_sum = glm::clamp(color_sum, 0.0f, 1.0f);
+
+            image.pixel(x, y) = color_sum;
+        }
+    }
+}
+void outline(sil::Image &image) {
+    std::vector<std::vector<float>> kernel = {
+        {-1.f, -1.f, -1.f},
+        {-1.f, 8.f, -1.f},
+        {-1.f, -1.f, -1.f},
+    };
+
+    int kernel_size = 3;
+    int half_size = kernel_size / 2;
+
+    sil::Image original_image = image;
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            glm::vec3 color_sum(0.0f);
+
+            for (int i = -half_size; i <= half_size; i++) {
+                for (int j = -half_size; j <= half_size; j++) {
+                    int neighbor_x = x + i;
+                    int neighbor_y = y + j;
+
+                    if (neighbor_x >= 0 && neighbor_x < image.width() &&
+                        neighbor_y >= 0 && neighbor_y < image.height()) {
+
+                        glm::vec3 neighbor_color = original_image.pixel(neighbor_x, neighbor_y);
+                        color_sum += neighbor_color * kernel[i + half_size][j + half_size];
+                    }
+                }
+            }
+
+            // color_sum = color_sum * 0.5f + 0.5f;
+            color_sum = glm::clamp(color_sum, 0.0f, 1.0f);
+
+            image.pixel(x, y) = color_sum;
+        }
+    }
+}
+void sharpen(sil::Image &image) {
+    std::vector<std::vector<float>> kernel = {
+        {0.f, -1.f, 0.f},
+        {-1.f, 5.f, -1.f},
+        {0.f, -1.f, 0.f},
+    };
+    
+    int kernel_size = 3;
+    int half_size = kernel_size / 2;
+
+    sil::Image original_image = image;
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            glm::vec3 color_sum(0.0f);
+
+            for (int i = -half_size; i <= half_size; i++) {
+                for (int j = -half_size; j <= half_size; j++) {
+                    int neighbor_x = x + i;
+                    int neighbor_y = y + j;
+
+                    if (neighbor_x >= 0 && neighbor_x < image.width() &&
+                        neighbor_y >= 0 && neighbor_y < image.height()) {
+
+                        glm::vec3 neighbor_color = original_image.pixel(neighbor_x, neighbor_y);
+                        color_sum += neighbor_color * kernel[i + half_size][j + half_size];
+                    }
+                }
+            }
+
+            // color_sum = color_sum * 0.5f + 0.5f;
+            color_sum = glm::clamp(color_sum, 0.0f, 1.0f);
+
+            image.pixel(x, y) = color_sum;
+        }
+    }
+}
+void bottomSobel(sil::Image &image) {
+    std::vector<std::vector<float>> kernel = {
+        {-1.f, -2.f, -1.f},
+        {0.f, 0.f, 0.f},
+        {1.f, 2.f, 1.f},
+    };
+
+    int kernel_size = 3;
+    int half_size = kernel_size / 2;
+
+    sil::Image original_image = image;
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            glm::vec3 color_sum(0.0f);
+
+            for (int i = -half_size; i <= half_size; i++) {
+                for (int j = -half_size; j <= half_size; j++) {
+                    int neighbor_x = x + i;
+                    int neighbor_y = y + j;
+
+                    if (neighbor_x >= 0 && neighbor_x < image.width() &&
+                        neighbor_y >= 0 && neighbor_y < image.height()) {
+
+                        glm::vec3 neighbor_color = original_image.pixel(neighbor_x, neighbor_y);
+                        color_sum += neighbor_color * kernel[i + half_size][j + half_size];
+                    }
+                }
+            }
+
+            // color_sum = color_sum * 0.5f + 0.5f;
+            color_sum = glm::clamp(color_sum, 0.0f, 1.0f);
+
+            image.pixel(x, y) = color_sum;
+        }
+    }
+}
+
 int main()
 {
     // {
@@ -771,6 +964,23 @@ int main()
     //     vortex(image);
     //     image.save("output/vortex_v2.png");
     // }
+    {
+        sil::Image conv{"images/logo.png"};
+        convolution(conv);
+        conv.save("output/convolution.png");
+        sil::Image embossImage{"images/logo.png"};
+        emboss(embossImage);
+        embossImage.save("output/emboss.png");
+        sil::Image outlinedImage{"images/logo.png"};
+        outline(outlinedImage);
+        outlinedImage.save("output/outline.png");
+        sil::Image sharpenImage{"images/logo.png"};
+        sharpen(sharpenImage);
+        sharpenImage.save("output/sharpen.png");
+        sil::Image bottomSobelImage{"images/logo.png"};
+        bottomSobel(bottomSobelImage);
+        bottomSobelImage.save("output/bottomSobel.png");
+    }
     // {
     //     sil::Image image{"images/logo.png"};
     //     test(image);
@@ -781,11 +991,11 @@ int main()
     //     test2(image);
     //     image.save("output/tests/test2.png");
     // }
-    {
-        sil::Image image{"images/logo.png"};
-        test3(image);
-        image.save("output/tests/test3.png");
-    }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     test3(image);
+    //     image.save("output/tests/test3.png");
+    // }
 
     return 0;
 }
