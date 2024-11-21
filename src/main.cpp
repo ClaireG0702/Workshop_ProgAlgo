@@ -742,7 +742,7 @@ int main()
     {
         sil::Image image{"images/logo.png"};
         vortex(image);
-        image.save("output/vortex.png");
+        image.save("output/vortex_v2.png");
     }
     // {
     //     sil::Image image{"images/logo.png"};
