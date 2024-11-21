@@ -538,6 +538,27 @@ void dithering(sil::Image &image)
     }
 }
 
+
+void histogramNormalization(sil::Image &image) {
+    auto darkestPix{image.pixel(0, 0)};
+    auto lightestPix{image.pixel(0, 0)};
+
+    for(int x{0}; x < image.width(); x++) {
+        for(int y{0}; y < image.height(); y++) {
+            float lum = brightness(image.pixel(x, y));
+
+            if(brightness(darkestPix) > lum) {
+                darkestPix = image.pixel(x, y);
+            } else if(brightness(lightestPix) < lum) {
+                lightestPix = image.pixel(x, y);
+            }
+
+            float normalizedLum = (lum - brightness(darkestPix)) / (brightness(lightestPix) - brightness(darkestPix));
+            image.pixel(x, y) = image.pixel(x, y) * (normalizedLum / lum);
+        }
+    }
+}
+
 void test(sil::Image &image)
 {
     for (int x{0}; x < image.width(); x++)
@@ -682,10 +703,15 @@ int main()
     //     mandelbrotFractal(image);
     //     image.save("output/MandelbrotFractal.png");
     // }
+    // {
+    //     sil::Image image{"images/photo.jpg"};
+    //     dithering(image);
+    //     image.save("output/dithering.png");
+    // }
     {
-        sil::Image image{"images/photo.jpg"};
-        dithering(image);
-        image.save("output/dithering.png");
+        sil::Image image{"images/photo_faible_contraste.jpg"};
+        histogramNormalization(image);
+        image.save("output/histogramNormalization.png");
     }
     // {
     //     sil::Image image{"images/logo.png"};
