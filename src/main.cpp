@@ -622,6 +622,33 @@ void test2(sil::Image &image)
 }
 void test3(sil::Image &image)
 {
+    sil::Image original_image = image;
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            glm::vec2 current_point{x, y};
+            glm::vec2 center_of_rotation{image.width()/2, image.height()/2};
+
+            float distance = glm::distance(current_point, center_of_rotation);
+
+            float angle = 25.f * (distance / glm::length(glm::vec2(image.width(), image.height())));
+
+            glm::vec2 rotated_point = glm::vec2{glm::rotate(glm::mat3{1.f}, angle) * glm::vec3{current_point - center_of_rotation, 0.f}} + center_of_rotation;
+
+            int rotated_x = static_cast<int>(std::round(rotated_point.x));
+            int rotated_y = static_cast<int>(std::round(rotated_point.y));
+
+            if (rotated_x >= 0 && rotated_x < image.width() && rotated_y >= 0 && rotated_y < image.height()) {
+                image.pixel(x, y) = original_image.pixel(rotated_x, rotated_y);
+            } else {
+                image.pixel(x, y) = {0, 0.5, 0.5};
+            }
+        }
+    }
+
+    image = mirrorMosaic(image);
+    pixelsSorting4(image);
+    image = splitRGB(image);
 }
 
 int main()
@@ -739,11 +766,11 @@ int main()
     //     histogramNormalization(image);
     //     image.save("output/histogramNormalization.png");
     // }
-    {
-        sil::Image image{"images/logo.png"};
-        vortex(image);
-        image.save("output/vortex_v2.png");
-    }
+    // {
+    //     sil::Image image{"images/logo.png"};
+    //     vortex(image);
+    //     image.save("output/vortex_v2.png");
+    // }
     // {
     //     sil::Image image{"images/logo.png"};
     //     test(image);
@@ -754,6 +781,11 @@ int main()
     //     test2(image);
     //     image.save("output/tests/test2.png");
     // }
+    {
+        sil::Image image{"images/logo.png"};
+        test3(image);
+        image.save("output/tests/test3.png");
+    }
 
     return 0;
 }
