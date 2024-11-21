@@ -492,22 +492,48 @@ void coloredGradient(sil::Image &image)
 
 void mandelbrotFractal(sil::Image &image)
 {
-    for (int x{0}; x < image.width(); x++) {
-        for (int y{0}; y < image.height(); y++) {
-            std::complex<float> c{static_cast<float>(x)/200-1.5f, static_cast<float>(y-250)/200};
-            std::complex<float> z{0,0};
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            std::complex<float> c{static_cast<float>(x) / 200 - 1.5f, static_cast<float>(y - 250) / 200};
+            std::complex<float> z{0, 0};
 
-            for(int i{0}; i < 50; i++) {
+            for (int i{0}; i < 50; i++)
+            {
                 z = z * z + c;
 
-                if(std::abs(z) > 2) {
-                    image.pixel(x, y) = glm::vec3 (static_cast<float>(i) / 50.f);
+                if (std::abs(z) > 2)
+                {
+                    image.pixel(x, y) = glm::vec3(static_cast<float>(i) / 50.f);
                     break;
                 }
             }
-            if(std::abs(z) < 2) {
+            if (std::abs(z) < 2)
+            {
                 image.pixel(x, y) = {1, 1, 1};
             }
+        }
+    }
+}
+
+void dithering(sil::Image &image)
+{
+    const int bayer_n = 4;
+    float bayerMatrix[bayer_n][bayer_n] = {
+        {    -0.5,       0,  -0.375,   0.125 },
+        {    0.25,   -0.25,   0.375,  -0.125 },
+        { -0.3125,  0.1875, -0.4375,   0.0625 },
+        {  0.4375, -0.0625,   0.3125,  -0.1875 },
+    };
+
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            float bright = brightness(image.pixel(x, y));
+
+            float threshold = bayerMatrix[x % bayer_n][y % bayer_n];
+
+            bright + threshold > 0.5 ? image.pixel(x, y) = {1, 1, 1} : image.pixel(x, y) = {0, 0, 0};
         }
     }
 }
@@ -651,10 +677,15 @@ int main()
     //     coloredGradient(image);
     //     image.save("output/coloredGradient.png");
     // }
+    // {
+    //     sil::Image image{500, 500};
+    //     mandelbrotFractal(image);
+    //     image.save("output/MandelbrotFractal.png");
+    // }
     {
-        sil::Image image{500, 500};
-        mandelbrotFractal(image);
-        image.save("output/MandelbrotFractal.png");
+        sil::Image image{"images/photo.jpg"};
+        dithering(image);
+        image.save("output/dithering.png");
     }
     // {
     //     sil::Image image{"images/logo.png"};
