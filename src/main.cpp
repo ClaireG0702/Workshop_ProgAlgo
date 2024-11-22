@@ -846,124 +846,124 @@ void bottomSobel(sil::Image &image) {
 
 int main()
 {
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     keepOnlyGreen(image);
-    //     image.save("output/keepOnlyGreen.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     swapChannels(image);
-    //     image.save("output/swapChannels.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     blackAndWhite(image);
-    //     image.save("output/blackAndWhite.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     negative(image);
-    //     image.save("output/negative.png");
-    // }
-    // {
-    //     sil::Image image{300, 200};
-    //     gradient(image);
-    //     image.save("output/gradient.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     mirror(image);
-    //     image.save("output/mirror.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     noisy(image);
-    //     image.save("output/noisy.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     sil::Image rotatedImage{rotation(image)};
-    //     rotatedImage.save("output/rotation.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     sil::Image editedImage{splitRGB(image)};
-    //     editedImage.save("output/splitRGB.png");
-    // }
-    // {
-    //     sil::Image image1{"images/photo.jpg"};
-    //     higherLuminosity(image1);
-    //     image1.save("output/higherLuminosity.png");
-    //     sil::Image image2{"images/photo.jpg"};
-    //     lowerLuminosity(image2);
-    //     image2.save("output/lowerLuminosity.png");
-    // }
-    // {
-    //     sil::Image discImage{500, 500};
-    //     disc(discImage);
-    //     discImage.save("output/disc.png");
-    //     sil::Image circleImage{500, 500};
-    //     circle(circleImage);
-    //     circleImage.save("output/circle.png");
-    //     sil::Image rosaceImage{600, 600};
-    //     rosace(rosaceImage);
-    //     rosaceImage.save("output/rosace.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     sil::Image mosaicImage{mosaic(image)};
-    //     mosaicImage.save("output/mosaic.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     sil::Image mosaicImage{mirrorMosaic(image)};
-    //     mosaicImage.save("output/mirrorMosaic.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     glitch(image);
-    //     image.save("output/glitch.png");
-    // }
-    // {
-    //     sil::Image image1{"images/logo.png"};
-    //     pixelsSorting1(image1);
-    //     image1.save("output/pixelsSorting1.png");
-    //     sil::Image image2{"images/logo.png"};
-    //     pixelsSorting2(image2);
-    //     image2.save("output/pixelsSorting2.png");
-    //     sil::Image image3{"images/logo.png"};
-    //     pixelsSorting3(image3);
-    //     image3.save("output/pixelsSorting3.png");
-    //     sil::Image image4{"images/logo.png"};
-    //     pixelsSorting4(image4);
-    //     image4.save("output/pixelsSorting4.png");
-    // }
-    // {
-    //     sil::Image image{300, 200};
-    //     coloredGradient(image);
-    //     image.save("output/coloredGradient.png");
-    // }
-    // {
-    //     sil::Image image{500, 500};
-    //     mandelbrotFractal(image);
-    //     image.save("output/MandelbrotFractal.png");
-    // }
-    // {
-    //     sil::Image image{"images/photo.jpg"};
-    //     dithering(image);
-    //     image.save("output/dithering.png");
-    // }
-    // {
-    //     sil::Image image{"images/photo_faible_contraste.jpg"};
-    //     histogramNormalization(image);
-    //     image.save("output/histogramNormalization.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     vortex(image);
-    //     image.save("output/vortex_v2.png");
-    // }
+    {
+        sil::Image image{"images/logo.png"};
+        keepOnlyGreen(image);
+        image.save("output/keepOnlyGreen.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        swapChannels(image);
+        image.save("output/swapChannels.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        blackAndWhite(image);
+        image.save("output/blackAndWhite.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        negative(image);
+        image.save("output/negative.png");
+    }
+    {
+        sil::Image image{300, 200};
+        gradient(image);
+        image.save("output/gradient.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        mirror(image);
+        image.save("output/mirror.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        noisy(image);
+        image.save("output/noisy.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        sil::Image rotatedImage{rotation(image)};
+        rotatedImage.save("output/rotation.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        sil::Image editedImage{splitRGB(image)};
+        editedImage.save("output/splitRGB.png");
+    }
+    {
+        sil::Image image1{"images/photo.jpg"};
+        higherLuminosity(image1);
+        image1.save("output/higherLuminosity.png");
+        sil::Image image2{"images/photo.jpg"};
+        lowerLuminosity(image2);
+        image2.save("output/lowerLuminosity.png");
+    }
+    {
+        sil::Image discImage{500, 500};
+        disc(discImage);
+        discImage.save("output/disc.png");
+        sil::Image circleImage{500, 500};
+        circle(circleImage);
+        circleImage.save("output/circle.png");
+        sil::Image rosaceImage{600, 600};
+        rosace(rosaceImage);
+        rosaceImage.save("output/rosace.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        sil::Image mosaicImage{mosaic(image)};
+        mosaicImage.save("output/mosaic.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        sil::Image mosaicImage{mirrorMosaic(image)};
+        mosaicImage.save("output/mirrorMosaic.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        glitch(image);
+        image.save("output/glitch.png");
+    }
+    {
+        sil::Image image1{"images/logo.png"};
+        pixelsSorting1(image1);
+        image1.save("output/pixelsSorting1.png");
+        sil::Image image2{"images/logo.png"};
+        pixelsSorting2(image2);
+        image2.save("output/pixelsSorting2.png");
+        sil::Image image3{"images/logo.png"};
+        pixelsSorting3(image3);
+        image3.save("output/pixelsSorting3.png");
+        sil::Image image4{"images/logo.png"};
+        pixelsSorting4(image4);
+        image4.save("output/pixelsSorting4.png");
+    }
+    {
+        sil::Image image{300, 200};
+        coloredGradient(image);
+        image.save("output/coloredGradient.png");
+    }
+    {
+        sil::Image image{500, 500};
+        mandelbrotFractal(image);
+        image.save("output/MandelbrotFractal.png");
+    }
+    {
+        sil::Image image{"images/photo.jpg"};
+        dithering(image);
+        image.save("output/dithering.png");
+    }
+    {
+        sil::Image image{"images/photo_faible_contraste.jpg"};
+        histogramNormalization(image);
+        image.save("output/histogramNormalization.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        vortex(image);
+        image.save("output/vortex_v2.png");
+    }
     {
         sil::Image conv{"images/logo.png"};
         convolution(conv);
@@ -981,21 +981,21 @@ int main()
         bottomSobel(bottomSobelImage);
         bottomSobelImage.save("output/bottomSobel.png");
     }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     test(image);
-    //     image.save("output/tests/test1.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     test2(image);
-    //     image.save("output/tests/test2.png");
-    // }
-    // {
-    //     sil::Image image{"images/logo.png"};
-    //     test3(image);
-    //     image.save("output/tests/test3.png");
-    // }
+    {
+        sil::Image image{"images/logo.png"};
+        test(image);
+        image.save("output/tests/test1.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        test2(image);
+        image.save("output/tests/test2.png");
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        test3(image);
+        image.save("output/tests/test3.png");
+    }
 
     return 0;
 }
